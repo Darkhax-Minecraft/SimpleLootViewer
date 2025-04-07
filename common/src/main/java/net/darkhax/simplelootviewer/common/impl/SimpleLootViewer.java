@@ -10,11 +10,13 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
+import java.util.List;
 
 public class SimpleLootViewer {
 
@@ -26,6 +28,7 @@ public class SimpleLootViewer {
     public static StreamCodec<RegistryFriendlyByteBuf, ResourceLocation> ID_STREAM = StreamCodec.of(FriendlyByteBuf::writeResourceLocation, FriendlyByteBuf::readResourceLocation);
     public static StreamCodec<RegistryFriendlyByteBuf, Object> UNSAFE_ID_STREAM = StreamCodec.of((buf, val) -> buf.writeResourceLocation((ResourceLocation) val), FriendlyByteBuf::readResourceLocation);
     public static StreamCodec<RegistryFriendlyByteBuf, Object> UNSAFE_ID_ARRAY_STREAM = StreamCodecs.list(ID_STREAM).map(list -> list.toArray(ResourceLocation[]::new), array -> Arrays.asList((ResourceLocation[]) array));
+    public static final StreamCodec<RegistryFriendlyByteBuf, List<ItemStack>> ITEM_STACK_LIST = StreamCodecs.list(ItemStack.OPTIONAL_STREAM_CODEC);
 
     public static final CachedSupplier<Config> CONFIG;
 

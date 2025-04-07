@@ -1,6 +1,7 @@
 package net.darkhax.simplelootviewer.common.impl.data.info;
 
 import net.darkhax.bookshelf.common.api.data.codecs.stream.StreamCodecs;
+import net.darkhax.simplelootviewer.common.impl.SimpleLootViewer;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
@@ -21,12 +22,12 @@ public record TableInfo(ResourceLocation lootTable, Name name, List<ItemStack> i
             (buf, val) -> {
                 buf.writeResourceLocation(val.lootTable);
                 Name.STREAM.encode(buf, val.name);
-                StreamCodecs.ITEM_STACK_LIST.encode(buf, val.items);
+                SimpleLootViewer.ITEM_STACK_LIST.encode(buf, val.items);
             },
             buf -> {
                 final ResourceLocation tableKey = buf.readResourceLocation();
                 final Name name = Name.STREAM.decode(buf);
-                final List<ItemStack> items = StreamCodecs.ITEM_STACK_LIST.decode(buf);
+                final List<ItemStack> items = SimpleLootViewer.ITEM_STACK_LIST.decode(buf);
                 return new TableInfo(tableKey, name, items);
             }
     );
