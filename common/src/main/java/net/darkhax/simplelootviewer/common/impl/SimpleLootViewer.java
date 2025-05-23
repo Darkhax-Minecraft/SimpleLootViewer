@@ -42,4 +42,9 @@ public class SimpleLootViewer {
         CONFIG = CachedSupplier.cache(() -> ConfigManager.load(MOD_ID, new Config()));
         CONFIG.get();
     }
+
+    public static void updateRegistryAccess(RegistryAccess access) {
+        REGISTRY_ACCESS = new WeakReference<>(access);
+        LOG.info("Updating registry access.");
+    }
 }

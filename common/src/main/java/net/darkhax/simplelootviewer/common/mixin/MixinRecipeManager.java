@@ -29,11 +29,13 @@ public class MixinRecipeManager {
     @Inject(method = "apply(Ljava/util/Map;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V", at = @At("HEAD"))
     private void onLoad(Map<ResourceLocation, JsonElement> object, ResourceManager resourceManager, ProfilerFiller profiler, CallbackInfo ci) {
         if (this.registries instanceof AccessorConfigurableRegistryLookup registryAccess) {
-            SimpleLootViewer.REGISTRY_ACCESS = new WeakReference<>(registryAccess.simplelootviewer$getRegistry());
-            SimpleLootViewer.LOG.info("Updating registry access.");
+            SimpleLootViewer.updateRegistryAccess(registryAccess.simplelootviewer$getRegistry());
+        }
+        else if (this.registries instanceof RegistryAccess ra) {
+            SimpleLootViewer.updateRegistryAccess(ra);
         }
         else {
-            SimpleLootViewer.LOG.info(this.registries.toString());
+            SimpleLootViewer.LOG.error("Failed to update registry access. Registry = {}", this.registries);
         }
     }
 }
